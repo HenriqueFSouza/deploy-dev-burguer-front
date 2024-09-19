@@ -2,6 +2,12 @@ import styled from 'styled-components';
 
 import texture from '../../assets/texture.svg';
 
+export const Container = styled.main`
+  width: 100%;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+`;
+
 export const Banner = styled.div`
   display: flex;
   position: relative;
@@ -20,12 +26,6 @@ export const Banner = styled.div`
     bottom: -50px;
     height: 200px;
   }
-`;
-
-export const Container = styled.main`
-  width: 100%;
-  background-color: #f0f0f0;
-  min-height: 100vh;
 `;
 
 export const Content = styled.section`

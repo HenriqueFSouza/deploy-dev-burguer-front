@@ -1,7 +1,6 @@
 import { Gear, ShoppingCart, User } from '@phosphor-icons/react';
 import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
 
-import logoImg from '../../assets/logo.svg';
 import { useUser } from '../../hooks/UserContext';
 import {
   Container,
@@ -28,7 +27,6 @@ export function Header() {
     <Container>
       <Content>
         <Navigation>
-          <img src={logoImg} alt="DevBurger logo" />
           <div>
             <HeaderLink $isActive={pathname === '/'} to="/">
               Home
