@@ -14,7 +14,7 @@ export function CartResume() {
   const [deliveryTax] = useState(500);
   const [, setClientSecret] = useState('');
 
-  const { cartProducts, clearCart } = useCart();
+  const { cartProducts } = useCart();
   const { updateDpmCheckerLink } = useUser();
   const navigate = useNavigate(); // Instancia o hook useNavigate para navegação
 
@@ -39,8 +39,6 @@ export function CartResume() {
       // Atualiza o dpmCheckerLink no contexto
       updateDpmCheckerLink(response.data.dpmCheckerLink);
 
-      // Limpa o carrinho e navega para a rota de checkout
-      clearCart();
       navigate('/checkout', {
         state: { clientSecret: response.data.clientSecret },
       });

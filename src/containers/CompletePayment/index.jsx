@@ -114,7 +114,7 @@ export function CompletePage() {
 
       setStatus(paymentIntent.status);
       setIntentId(paymentIntent.id);
-      setIsLoading(false); // Defina o carregamento como falso após a resposta do Stripe
+      setIsLoading(false);
     });
   }, [stripe]);
 
