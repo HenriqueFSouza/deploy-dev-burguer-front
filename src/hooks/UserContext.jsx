@@ -5,6 +5,7 @@ const UserContext = createContext({});
 
 export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
+  const [dpmCheckerLink, setDpmCheckerLink] = useState('');
 
   const putUserData = (userInfo) => {
     setUserData(userInfo);
@@ -29,8 +30,20 @@ export const UserProvider = ({ children }) => {
     loadUserData();
   }, []);
 
+  const updateDpmCheckerLink = (link) => {
+    setDpmCheckerLink(link);
+  };
+
   return (
-    <UserContext.Provider value={{ putUserData, userData, logout }}>
+    <UserContext.Provider
+      value={{
+        putUserData,
+        userData,
+        logout,
+        dpmCheckerLink,
+        updateDpmCheckerLink,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

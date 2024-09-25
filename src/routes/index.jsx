@@ -1,6 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { Login, Admin, Cart, Home, Menu, Register } from '../containers';
+import {
+  Login,
+  Admin,
+  Cart,
+  Home,
+  Menu,
+  Register,
+  CheckoutPage,
+  CompletePage,
+} from '../containers';
 import { PrivateRoute } from './privateRoute';
 
 export const router = createBrowserRouter([
@@ -43,5 +52,13 @@ export const router = createBrowserRouter([
     element: (
       <PrivateRoute component={<Admin path="/produtos/editar" />} isAdmin />
     ),
+  },
+  {
+    path: '/checkout',
+    element: <PrivateRoute component={<CheckoutPage />} />,
+  },
+  {
+    path: '/complete',
+    element: <PrivateRoute component={<CompletePage />} />,
   },
 ]);

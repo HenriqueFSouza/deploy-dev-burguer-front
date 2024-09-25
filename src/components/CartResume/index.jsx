@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa o useNavigate para navegação
 import { toast } from 'react-toastify';
 
 import { useCart } from '../../hooks/CartContext';
+import { useUser } from '../../hooks/UserContext';
 import { api } from '../../services/api';
 import formatCurrency from '../../utils/formatCurrency';
 import { Button } from '../Button';
@@ -10,8 +12,11 @@ import { Container } from './styles';
 export function CartResume() {
   const [finalPrice, setFinalPrice] = useState(0);
   const [deliveryTax] = useState(500);
+  const [, setClientSecret] = useState('');
 
   const { cartProducts, clearCart } = useCart();
+  const { updateDpmCheckerLink } = useUser();
+  const navigate = useNavigate(); // Instancia o hook useNavigate para navegação
 
   useEffect(() => {
     const sumAllItems = cartProducts.reduce((acc, current) => {
@@ -19,23 +24,30 @@ export function CartResume() {
     }, 0);
 
     setFinalPrice(sumAllItems);
-  }, [cartProducts, deliveryTax]);
+  }, [cartProducts]);
 
-  const submitOrder = async () => {
-    const order = cartProducts.map((product) => {
-      return { id: product.id, quantity: product.quantity };
-    });
+  const handleCheckout = async () => {
+    try {
+      // Cria o PaymentIntent no backend com os itens do carrinho
+      const response = await api.post('/create-payment-intent', {
+        items: cartProducts,
+      });
 
-    await toast.promise(api.post('/orders', { products: order }), {
-      pending: 'Realizando o seu pedido...',
-      success: {
-        render: () => {
-          clearCart();
-          return 'Pedido realizado com sucesso';
-        },
-      },
-      error: 'Falha ao tentar realizar o seu pedido, tente novamente',
-    });
+      // Salva o clientSecret retornado pelo backend
+      setClientSecret(response.data.clientSecret);
+
+      // Atualiza o dpmCheckerLink no contexto
+      updateDpmCheckerLink(response.data.dpmCheckerLink);
+
+      // Limpa o carrinho e navega para a rota de checkout
+      clearCart();
+      navigate('/checkout', {
+        state: { clientSecret: response.data.clientSecret },
+      });
+    } catch (error) {
+      toast.error('Erro ao tentar processar o pagamento.');
+      console.error(error);
+    }
   };
 
   return (
@@ -53,7 +65,8 @@ export function CartResume() {
           <p>{formatCurrency(finalPrice + deliveryTax)}</p>
         </div>
       </Container>
-      <Button onClick={submitOrder}>Finalizar Pedido</Button>
+
+      <Button onClick={handleCheckout}>Finalizar Pedido</Button>
     </div>
   );
 }

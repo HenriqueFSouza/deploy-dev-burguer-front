@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { createContext, useContext, useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const CartContext = createContext({});
 
@@ -20,10 +21,12 @@ export const CartProvider = ({ children }) => {
       newCartProducts[cartIndex].quantity =
         newCartProducts[cartIndex].quantity + 1;
       setCartProducts(newCartProducts);
+      toast.success('Produto adicionado com sucesso');
     } else {
       product.quantity = 1;
       newCartProducts = [...cartProducts, product];
       setCartProducts(newCartProducts);
+      toast.success('Produto adicionado com sucesso');
     }
 
     updateLocalStorage(newCartProducts);
